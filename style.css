@@ -1,0 +1,46 @@
+/* style.css */
+.content-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.floating-title {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  z-index: 10;
+  pointer-events: none; /* タイトルエリアをクリック透過にする */
+}
+
+.floating-title h1,
+.floating-title h2 {
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.9); /* 視認性のため文字に影をつける */
+  margin: 0;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  min-height: 100%;
+  padding: 2rem;
+  align-items: center;
+  overflow: hidden; /* グリッドからのはみ出しを防ぐ */
+}
+
+.content-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 2rem;
+  min-width: 0; /* グリッド内でのオーバーフロー防止 */
+}
+
+.content-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-width: 0; /* グリッド内でのオーバーフロー防止 */
+}
