@@ -20,7 +20,7 @@
       }"
     >
       <img 
-        :src="`/images/${imageName}.png`" 
+        :src="`${base}/images/${imageName}.png`" 
         :class="`${imageName}-image celestial-image`"
         :alt="title"
         :style="{
@@ -35,6 +35,15 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
+
+const base = ref('')
+
+onMounted(() => {
+  // GitHub Pages のベースパスを取得
+  base.value = import.meta.env.BASE_URL
+})
+
 defineProps({
   title: {
     type: String,

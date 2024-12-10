@@ -9,3 +9,4 @@ components.d.ts
 # Project summary files
 *_project_summary.md
 .summaryignore
+generate_project_summary.py
