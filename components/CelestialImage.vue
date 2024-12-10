@@ -20,9 +20,10 @@
       }"
     >
       <img 
-        :src="`${base}/images/${imageName}.png`" 
+        :src="imageSrc"
         :class="`${imageName}-image celestial-image`"
         :alt="title"
+        @error="handleImageError"
         :style="{
           width: '100%',
           height: '100%',
@@ -30,21 +31,17 @@
           maxHeight: `${imageSize}px`
         }"
       />
+      <div v-if="hasError" class="error-message">
+        画像の読み込みに失敗しました
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 
-const base = ref('')
-
-onMounted(() => {
-  // GitHub Pages のベースパスを取得
-  base.value = import.meta.env.BASE_URL
-})
-
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     required: true
@@ -58,6 +55,20 @@ defineProps({
     default: 300 // デフォルトサイズ
   }
 })
+
+const hasError = ref(false)
+
+// 画像のパスを計算
+const imageSrc = computed(() => {
+  // 開発環境とプロダクション環境の両方で動作するパスを生成
+  return `/images/${props.imageName}.png`
+})
+
+// 画像読み込みエラーのハンドリング
+const handleImageError = (event) => {
+  console.error(`画像の読み込みに失敗: ${imageSrc.value}`)
+  hasError.value = true
+}
 </script>
 
 <style scoped>
@@ -67,7 +78,7 @@ defineProps({
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden; /* はみ出しを防ぐ */
+  overflow: hidden;
 }
 
 .celestial-container {
@@ -81,5 +92,16 @@ defineProps({
 
 .celestial-image {
   object-fit: contain;
+}
+
+.error-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: red;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 4px;
 }
 </style>
