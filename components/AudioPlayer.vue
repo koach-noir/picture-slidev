@@ -1,4 +1,4 @@
-<!-- BackgroundMusic.vue -->
+<!-- AudioPlayer.vue -->
 <template>
   <div class="audio-controls">
     <audio
@@ -23,7 +23,6 @@ import { ref, computed, onMounted } from 'vue'
 const audioPlayer = ref(null)
 const isPlaying = ref(false)
 
-// BASE_URLを考慮したパスの生成
 const audioPath = computed(() => {
   const base = import.meta.env.BASE_URL || '/'
   return `${base}audio/audio_01.mp3`.replace('//', '/')
@@ -36,11 +35,9 @@ const togglePlay = () => {
     audioPlayer.value.pause()
     isPlaying.value = false
   } else {
-    // エラーハンドリングを追加
     audioPlayer.value.play().catch(error => {
       console.error('Audio playback failed:', error)
       console.log('Current audio path:', audioPath.value)
-      // ユーザーにエラーを通知することもできます
       alert('音声の再生に失敗しました。オーディオファイルが正しく配置されているか確認してください。')
     })
     isPlaying.value = true
@@ -49,7 +46,7 @@ const togglePlay = () => {
 
 onMounted(() => {
   if (audioPlayer.value) {
-    audioPlayer.value.volume = 0.5 // 音量を50%に設定
+    audioPlayer.value.volume = 0.5
   }
 })
 </script>

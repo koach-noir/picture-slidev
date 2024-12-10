@@ -28,7 +28,7 @@ class: 'bg-contain bg-center bg-no-repeat'
     :moon-size="495"
   />
 
-  <BackgroundMusic />
+  <AudioPlayer />
   
 </div>
 
