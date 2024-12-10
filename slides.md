@@ -27,6 +27,9 @@ class: 'bg-contain bg-center bg-no-repeat'
     :earth-size="840"
     :moon-size="495"
   />
+
+  <BackgroundMusic />
+  
 </div>
 
 ---
