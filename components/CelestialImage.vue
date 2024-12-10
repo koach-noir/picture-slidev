@@ -32,7 +32,7 @@
         }"
       />
       <div v-if="hasError" class="error-message">
-        画像の読み込みに失敗しました
+        画像の読み込みに失敗しました: {{ imageSrc }}
       </div>
     </div>
   </div>
@@ -58,15 +58,18 @@ const props = defineProps({
 
 const hasError = ref(false)
 
-// 画像のパスを計算
+// BASE_URL を考慮したパス生成
 const imageSrc = computed(() => {
-  // 開発環境とプロダクション環境の両方で動作するパスを生成
-  return `/images/${props.imageName}.png`
+  const base = import.meta.env.BASE_URL || '/'
+  // 先頭と末尾のスラッシュを正規化
+  const normalizedBase = base.endsWith('/') ? base : `${base}/`
+  return `${normalizedBase}images/${props.imageName}.png`
 })
 
-// 画像読み込みエラーのハンドリング
+// エラーハンドリング時にパス情報も表示
 const handleImageError = (event) => {
   console.error(`画像の読み込みに失敗: ${imageSrc.value}`)
+  console.log('BASE_URL:', import.meta.env.BASE_URL)
   hasError.value = true
 }
 </script>
@@ -103,5 +106,6 @@ const handleImageError = (event) => {
   background: rgba(0, 0, 0, 0.7);
   padding: 10px;
   border-radius: 4px;
+  font-size: 12px;
 }
 </style>
