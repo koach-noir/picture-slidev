@@ -157,7 +157,10 @@ watch(
 // 初期化
 onMounted(async () => {
   try {
-    const response = await fetch('/audio/bgm-settings.json')
+    const base = import.meta.env.BASE_URL || '/'
+    // 先頭と末尾のスラッシュを正規化
+    const normalizedBase = base.endsWith('/') ? base : `${base}/`
+    const response = await fetch(`${normalizedBase}audio/bgm-settings.json`.replace('//', '/'))
     bgmSettings.value = await response.json()
     
     const cueResponse = await fetch(bgmSettings.value.bgmSettings.cuePath)
