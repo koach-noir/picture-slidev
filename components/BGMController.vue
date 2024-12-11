@@ -1,6 +1,6 @@
 <!-- components/BGMController.vue -->
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 import { useSlideContext } from '@slidev/client'
 import AudioPlayer from './AudioPlayer.vue'
 
@@ -18,6 +18,18 @@ const debug = ref({
   trackPositions: null,
   lastError: null,
   lastSlideChange: null
+})
+
+// audioPathを加工するcomputed property
+const normalizedAudioPath = computed(() => {
+  if (!bgmSettings.value?.bgmSettings?.audioPath) return ''
+  
+  const base = import.meta.env.BASE_URL || '/'
+  const normalizedBase = base.endsWith('/') ? base : `${base}/`
+  const audioPath = bgmSettings.value.bgmSettings.audioPath
+  
+  // 先頭のスラッシュを除去してベースパスと結合
+  return `${normalizedBase}${audioPath.replace(/^\//, '')}`.replace('//', '/')
 })
 
 // CUEシートをパースする関数
@@ -160,15 +172,24 @@ onMounted(async () => {
     const base = import.meta.env.BASE_URL || '/'
     // 先頭と末尾のスラッシュを正規化
     const normalizedBase = base.endsWith('/') ? base : `${base}/`
+    
+    // 設定ファイルの取得
     const response = await fetch(`${normalizedBase}audio/bgm-settings.json`.replace('//', '/'))
     bgmSettings.value = await response.json()
     
-    const cueResponse = await fetch(bgmSettings.value.bgmSettings.cuePath)
+    // CUEファイルのパスを構築
+    const cuePath = bgmSettings.value.bgmSettings.cuePath
+    const normalizedCuePath = `${normalizedBase}${cuePath.replace(/^\//, '')}`.replace('//', '/')
+    
+    // console.log('Attempting to fetch CUE from:', normalizedCuePath)
+    const cueResponse = await fetch(normalizedCuePath)
+    
+    if (!cueResponse.ok) {
+      throw new Error(`Failed to fetch CUE file: ${cueResponse.status} ${cueResponse.statusText}`)
+    }
+    
     const cueText = await cueResponse.text()
     trackPositions.value = parseCueSheet(cueText)
-    
-    debug.value.initialized = true
-    debug.value.trackPositions = Object.fromEntries(trackPositions.value)
     
     // console.log('BGM Controller initialized:', debug.value)
 
@@ -203,6 +224,6 @@ onUnmounted(() => {
 <template>
   <AudioPlayer 
     ref="audioPlayerRef"
-    :src="bgmSettings?.bgmSettings?.audioPath"
+    :src="normalizedAudioPath"
   />
 </template>
