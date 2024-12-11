@@ -31,13 +31,22 @@
 
       <!-- 再生コントロール -->
       <div class="controls">
+        <!-- 最初から再生ボタン -->
+        <button
+          class="control-button"
+          @click="restartFromBeginning"
+          title="最初から再生"
+        >
+          ⟲
+        </button>
+        
         <!-- 10秒戻るボタン -->
         <button
           class="control-button"
           @click="skipBackward"
           title="10秒戻る"
         >
-          ⫷10
+          ⫷<sup>10</sup>
         </button>
 
         <!-- 再生/一時停止ボタン -->
@@ -56,18 +65,9 @@
           @click="skipForward"
           title="10秒進む"
         >
-          10⫸
+          <sup>10</sup>⫸
         </button>
 
-        <!-- 最初から再生ボタン -->
-        <button
-          class="control-button"
-          @click="restartFromBeginning"
-          title="最初から再生"
-        >
-          ⟲
-        </button>
-        
         <!-- 音量調整セクション -->
         <div 
           class="volume-control"
@@ -86,7 +86,11 @@
             @mouseleave="handleSliderLeave"
             @mouseenter="isSliderHovered = true"
           >
-            <div class="volume-slider">
+        <div 
+          class="volume-slider"
+          @mouseleave="handleSliderLeave"
+          @mouseenter="isSliderHovered = true"
+        >
             <input
               type="range"
               min="0"
@@ -157,7 +161,35 @@ const seek = () => {
 }
 
 const handleSliderLeave = () => {
-  if (!isSliderHovered.value) {
+    isSliderHovered.value = false
+  // スライダーからマウスが離れた時に少し遅延を入れて非表示に
+  setTimeout(() => {
+    if (!isSliderHovered.value) {
+      showVolume.value = false
+    }
+  }, 500)
+}
+
+const isVolumeControlHovered = ref(false)
+
+// ハンドラー関数の実装
+const handleVolumeControlEnter = () => {
+  isVolumeControlHovered.value = true
+  showVolume.value = true
+}
+
+const handleVolumeControlLeave = () => {
+  isVolumeControlHovered.value = false
+  // スライダーコンテナにホバーしていない場合のみ非表示
+  if (!isSliderContainerHovered.value) {
+    showVolume.value = false
+  }
+}
+
+const handleSliderContainerLeave = () => {
+  isSliderContainerHovered.value = false
+  // 音量コントロール全体にホバーしていない場合のみ非表示
+  if (!isVolumeControlHovered.value) {
     showVolume.value = false
   }
 }
@@ -390,16 +422,16 @@ const restartFromBeginning = () => {
 }
 
 .slider {
-  margin: 0; /* マージンをリセット */
   -webkit-appearance: none;
   appearance: none;
   height: 100px;
   width: 4px;
   background: rgba(255, 255, 255, 0.3);
   outline: none;
-  writing-mode: bt-lr; /* IE */
-  -webkit-appearance: slider-vertical; /* Chromium */
   border-radius: 2px;
+  margin: 0;
+  writing-mode: vertical-lr;
+  direction: rtl;
 }
 
 .slider::-webkit-slider-thumb {
@@ -432,7 +464,6 @@ const restartFromBeginning = () => {
 
 /* スライダーのトラック部分のスタイル */
 .slider::-webkit-slider-runnable-track {
-  margin: 0 auto;
   width: 4px;
   cursor: pointer;
   background: rgba(255, 255, 255, 0.3);
@@ -440,7 +471,6 @@ const restartFromBeginning = () => {
 }
 
 .slider::-moz-range-track {
-  margin: 0 auto;
   width: 4px;
   cursor: pointer;
   background: rgba(255, 255, 255, 0.3);
