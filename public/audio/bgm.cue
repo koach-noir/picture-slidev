@@ -1,0 +1,10 @@
+FILE "bgm.mp3" MP3
+  TRACK 01 AUDIO
+    TITLE "Intro Theme"
+    INDEX 01 00:00:00
+  TRACK 02 AUDIO
+    TITLE "Main Theme"
+    INDEX 01 01:10:00
+  TRACK 03 AUDIO
+    TITLE "Ending Theme"
+    INDEX 01 02:05:00

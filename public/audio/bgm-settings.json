@@ -1,0 +1,23 @@
+{
+    "bgmSettings": {
+      "audioPath": "/audio/bgm.mp3",
+      "cuePath": "/audio/bgm.cue",
+      "bgms": {
+        "intro": {
+          "trackName": "Intro Theme",
+          "playCount": "loop",
+          "description": "導入部のBGM"
+        },
+        "main": {
+          "trackName": "Main Theme",
+          "playCount": "loop",
+          "description": "メインのBGM"
+        },
+        "ending": {
+          "trackName": "Ending Theme",
+          "playCount": 1,
+          "description": "エンディングのBGM"
+        }
+      }
+    }
+  }

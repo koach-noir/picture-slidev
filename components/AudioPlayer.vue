@@ -144,7 +144,7 @@ const toggleVisibility = () => {
 }
 const audioPath = computed(() => {
   const base = import.meta.env.BASE_URL || '/'
-  return `${base}audio/audio_01.mp3`.replace('//', '/')
+  return `${base}audio/bgm.mp3`.replace('//', '/')
 })
 
 const volumeIcon = computed(() => {

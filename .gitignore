@@ -6,6 +6,9 @@ dist
 .remote-assets
 components.d.ts
 
+# backup filses
+*.bk
+
 # Project summary files
 *_project_summary.md
 .summaryignore

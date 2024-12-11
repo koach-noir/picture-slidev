@@ -8,6 +8,7 @@ dark: true  # ダークモードを有効化
 highlighter: shiki
 background: "/images/sun-in-the-universe.svg"
 class: 'bg-contain bg-center bg-no-repeat'
+bgmName: "intro"
 ---
 
 <div class="content-wrapper">
@@ -19,7 +20,6 @@ class: 'bg-contain bg-center bg-no-repeat'
 
   </div>
 
-
   <SolarSystemAnimation 
     v-if="$slidev"
     :earth-orbit-duration="400000"
@@ -27,19 +27,21 @@ class: 'bg-contain bg-center bg-no-repeat'
     :earth-size="840"
     :moon-size="495"
   />
-
-  <AudioPlayer />
   
 </div>
+
 
 ---
 src: ./pages/toc.md
 transition: slide-down
 activeTopic: "sun"
+bgmName: "main"
 ---
 
 <!-- this page will be loaded from './pages/toc.md' Contents here are ignored -->
 
+---
+bgmName: "main"
 ---
 
 # 太陽について
@@ -70,10 +72,13 @@ activeTopic: "sun"
 src: ./pages/toc.md
 transition: slide-down
 activeTopic: "earth"
+bgmName: "main"
 ---
 
 <!-- this page will be loaded from './pages/toc.md' Contents here are ignored -->
 
+---
+bgmName: "main"
 ---
 
 # 地球について
@@ -104,10 +109,13 @@ activeTopic: "earth"
 src: ./pages/toc.md
 transition: slide-down
 activeTopic: "moon"
+bgmName: "main"
 ---
 
 <!-- this page will be loaded from './pages/toc.md' Contents here are ignored -->
 
+---
+bgmName: "main"
 ---
 
 # 月について
@@ -133,4 +141,9 @@ activeTopic: "moon"
   </div>
 </div>
 
+---
+src: ./pages/toc.md
+transition: slide-down
+activeTopic: ""
+bgmName: "ending"
 ---
