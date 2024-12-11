@@ -1,7 +1,23 @@
 <!-- AudioPlayer.vue -->
 <template>
   <div class="audio-controls">
-    <audio
+    <!-- トグルボタンは常に表示 -->
+    <button 
+      class="visibility-toggle"
+      @click="toggleVisibility"
+      :title="isHidden ? '表示' : '非表示'"
+    >
+      <span class="toggle-icon" :class="{ 'is-hidden': !isHidden }">
+        🔊
+      </span>
+      <span class="toggle-arrow" :class="{ 'is-hidden': isHidden }">
+        ▼
+      </span>
+    </button>
+
+    <!-- コントロールパネル部分を別のdivで分離 -->
+    <div class="controls-panel" :class="{ 'is-hidden': isHidden }">
+      <audio
       ref="audioPlayer"
       :src="audioPath"
       loop
@@ -101,6 +117,7 @@
               class="slider"
                 orient="vertical"
             />
+          </div>
         </div>
       </div>
     </div>
@@ -112,6 +129,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 
+const isHidden = ref(false)
 const audioPlayer = ref(null)
 const isPlaying = ref(false)
 const volume = ref(0.5)
@@ -121,6 +139,9 @@ const isSliderHovered = ref(false)
 const currentTime = ref(0)
 const duration = ref(0)
 
+const toggleVisibility = () => {
+  isHidden.value = !isHidden.value
+}
 const audioPath = computed(() => {
   const base = import.meta.env.BASE_URL || '/'
   return `${base}audio/audio_01.mp3`.replace('//', '/')
@@ -232,11 +253,23 @@ watch(volume, (newValue) => {
   }
 })
 
+
+// 初期状態の読み込み
 onMounted(() => {
+  const savedState = localStorage.getItem('audioPlayerHidden')
+  if (savedState !== null) {
+    isHidden.value = JSON.parse(savedState)
+  }
   if (audioPlayer.value) {
     audioPlayer.value.volume = volume.value
   }
 })
+
+// 状態変更時の保存
+watch(isHidden, (newValue) => {
+  localStorage.setItem('audioPlayerHidden', JSON.stringify(newValue))
+})
+
 
 // 10秒戻る
 const skipBackward = () => {
@@ -269,6 +302,72 @@ const restartFromBeginning = () => {
   bottom: 20px;
   right: 20px;
   z-index: 100;
+}
+
+.visibility-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.controls-panel {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.controls-panel.is-hidden {
+  transform: translateY(20px);
+  opacity: 0;
+  pointer-events: none; /* 非表示時はクリックを無効化 */
+}
+
+.toggle-icon {
+  font-size: 1.5em; /* アイコンサイズを大きく */
+  opacity: 0.15; /* 85%の透明度 */
+  transition: opacity 0.2s ease;
+}
+
+.toggle-arrow {
+  font-size: 0.8em; /* 矢印サイズを小さく */
+}
+
+.toggle-icon.is-hidden {
+  display: none;
+}
+
+.toggle-arrow.is-hidden {
+  display: none;
+}
+
+/* ホバー時の透明度調整 */
+.visibility-toggle:hover .toggle-icon {
+  opacity: 1;
+}
+
+.visibility-toggle {
+  position: absolute;
+  top: -30px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.visibility-toggle:hover {
+  background: rgba(0, 0, 0, 0.8);
 }
 
 .controls-wrapper {
