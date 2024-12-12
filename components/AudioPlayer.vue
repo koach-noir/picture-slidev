@@ -50,7 +50,7 @@
         <!-- 最初から再生ボタン -->
         <button
           class="control-button"
-          @click="restartFromBeginning"
+          @click="restart"
           title="最初から再生"
         >
           ⟲
@@ -139,7 +139,7 @@ const showVolume = ref(false)
 const isSliderHovered = ref(false)
 const currentTime = ref(0)
 const duration = ref(0)
-const emit = defineEmits(['playStateChange'])
+const emit = defineEmits(['playStateChange', 'playerAction'])
 
 const toggleVisibility = () => {
   isHidden.value = !isHidden.value
@@ -281,29 +281,47 @@ watch(isHidden, (newValue) => {
 })
 
 
-// 10秒戻る
-const skipBackward = () => {
-  if (audioPlayer.value) {
-    audioPlayer.value.currentTime = Math.max(0, audioPlayer.value.currentTime - 10)
+// 10秒進む
+const skipForward = async () => {
+  try {
+    // イベントを発行し、結果を待つ
+    const shouldPreventDefault = await emit('playerAction', 'skipForward')
+    // shouldPreventDefaultがtrueの場合は、デフォルトの動作をスキップ
+    if (!shouldPreventDefault && audioPlayer.value) {
+      audioPlayer.value.currentTime = Math.min(duration.value, audioPlayer.value.currentTime + 10)
+    }
+  } catch (error) {
+    console.error('Skip forward action failed:', error)
   }
 }
 
-// 10秒進む
-const skipForward = () => {
-  if (audioPlayer.value) {
-    audioPlayer.value.currentTime = Math.min(duration.value, audioPlayer.value.currentTime + 10)
+// 10秒戻る
+const skipBackward = async () => {
+  try {
+    const shouldPreventDefault = await emit('playerAction', 'skipBackward')
+    if (!shouldPreventDefault && audioPlayer.value) {
+      audioPlayer.value.currentTime = Math.max(0, audioPlayer.value.currentTime - 10)
+    }
+  } catch (error) {
+    console.error('Skip backward action failed:', error)
   }
 }
 
 // 最初から再生
-const restartFromBeginning = () => {
-  if (audioPlayer.value) {
-    audioPlayer.value.currentTime = 0
-    if (!isPlaying.value) {
-      togglePlay()
+const restart = async () => {
+  try {
+    const shouldPreventDefault = await emit('playerAction', 'restart')
+    if (!shouldPreventDefault && audioPlayer.value) {
+      audioPlayer.value.currentTime = 0
+      if (!isPlaying.value) {
+        await audioPlayer.value.play()
+        isPlaying.value = true
+      }
     }
+  } catch (error) {
+    console.error('Restart action failed:', error)
   }
-  }
+}
 </script>
 
 <style scoped>

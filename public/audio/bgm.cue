@@ -4,7 +4,7 @@ FILE "bgm.mp3" MP3
     INDEX 01 00:00:00
   TRACK 02 AUDIO
     TITLE "Main Theme"
-    INDEX 01 01:10:00
+    INDEX 01 00:55:00
   TRACK 03 AUDIO
     TITLE "Ending Theme"
-    INDEX 01 02:05:00
+    INDEX 01 02:19:00

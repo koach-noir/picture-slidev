@@ -152,21 +152,6 @@ function handlePlayStateChange(isPlaying) {
   }
 }
 
-// 再生位置の監視
-const onTimeUpdate = () => {
-  if (!audioPlayerRef.value || !currentBgmInfo.value) return
-  const audioEl = audioPlayerRef.value.$refs.audioPlayer
-
-  if (audioEl.currentTime >= currentBgmInfo.value.endTime) {
-    if (currentBgmInfo.value.playCount === 'loop') {
-      audioEl.currentTime = currentBgmInfo.value.startTime
-    } else {
-      audioEl.pause()
-      audioEl.currentTime = currentBgmInfo.value.endTime
-    }
-  }
-}
-
 // BGM停止用の関数（script setup内で定義）
 async function stopBGM() {
   if (audioPlayerRef.value) {
@@ -175,6 +160,76 @@ async function stopBGM() {
     // 停止時にisPlayingを同期
     audioPlayerRef.value.isPlaying = false
     currentBgmInfo.value = null
+  }
+}
+
+async function handlePlayerAction(action) {
+  if (!audioPlayerRef.value || !currentBgmInfo.value) {
+    return false // デフォルトの動作を許可
+  }
+
+  const audioEl = audioPlayerRef.value.$refs.audioPlayer
+  const { startTime, endTime } = currentBgmInfo.value
+
+  try {
+    switch (action) {
+      case 'skipForward':
+        await handleSkipForward(audioEl, startTime, endTime)
+        return true // デフォルトの動作を防ぐ
+
+      case 'skipBackward':
+        await handleSkipBackward(audioEl, startTime)
+        return true
+
+      case 'restart':
+        await handleRestart(audioEl, startTime)
+        return true
+
+      default:
+        return false
+    }
+  } catch (error) {
+    console.error('BGM action failed:', error)
+    return false // エラー時はデフォルトの動作を許可
+  }
+}
+
+// 個別のハンドラー関数
+async function handleSkipForward(audioEl, startTime, endTime) {
+  const newTime = Math.min(endTime, audioEl.currentTime + 10)
+  audioEl.currentTime = newTime
+}
+
+async function handleSkipBackward(audioEl, startTime) {
+  const newTime = Math.max(startTime, audioEl.currentTime - 10)
+  audioEl.currentTime = newTime
+}
+
+async function handleRestart(audioEl, startTime) {
+  audioEl.currentTime = startTime
+  if (audioEl.paused) {
+    await audioEl.play()
+    audioPlayerRef.value.isPlaying = true
+  }
+}
+
+// 再生位置の監視
+const onTimeUpdate = async () => {
+  if (!audioPlayerRef.value || !currentBgmInfo.value) return
+
+  const audioEl = audioPlayerRef.value.$refs.audioPlayer
+  const { startTime, endTime, playCount } = currentBgmInfo.value
+
+  if (audioEl.currentTime < startTime) {
+    audioEl.currentTime = startTime
+  }
+  else if (audioEl.currentTime >= endTime) {
+    if (playCount === 'loop') {
+      audioEl.currentTime = startTime
+    } else {
+      await audioEl.pause()
+      audioPlayerRef.value.isPlaying = false
+    }
   }
 }
 
@@ -259,5 +314,6 @@ onUnmounted(() => {
     ref="audioPlayerRef"
     :src="normalizedAudioPath"
     @playStateChange="handlePlayStateChange"
+    @playerAction="handlePlayerAction"
   />
 </template>
