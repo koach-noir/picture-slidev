@@ -11,18 +11,21 @@
 <script setup>
 import { computed } from 'vue'
 import { useSlideContext } from '@slidev/client'
+import { resolveBasePath } from '../utils/path'
 
 const { $slidev } = useSlideContext()
 
 const backgroundStyle = computed(() => {
   const currentSlide = $slidev.nav.currentSlideRoute
   const bgImage = currentSlide?.meta?.slide?.frontmatter?.background
-  return bgImage ? {
-    backgroundImage: `url(${bgImage})`,
+  if (!bgImage) return {}
+  
+  return {
+    backgroundImage: `url(${resolveBasePath(bgImage)})`,
     backgroundSize: 'contain',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat'
-  } : {}
+  }
 })
 </script>
 
