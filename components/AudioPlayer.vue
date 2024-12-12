@@ -1,4 +1,4 @@
-<!-- AudioPlayer.vue -->
+<!-- components/AudioPlayer.vue -->
 <template>
   <div class="audio-controls">
     <!-- トグルボタンは常に表示 -->
@@ -139,6 +139,7 @@ const showVolume = ref(false)
 const isSliderHovered = ref(false)
 const currentTime = ref(0)
 const duration = ref(0)
+const emit = defineEmits(['playStateChange'])
 
 const toggleVisibility = () => {
   isHidden.value = !isHidden.value
@@ -230,7 +231,15 @@ const togglePlay = () => {
     })
     isPlaying.value = true
   }
+
+  // 再生状態の変更を親コンポーネントに通知
+  emit('playStateChange', isPlaying.value)
 }
+
+// isPlayingプロパティをコンポーネント外部から変更可能にする
+defineExpose({
+  isPlaying
+})
 
 const updateVolume = () => {
   if (audioPlayer.value) {

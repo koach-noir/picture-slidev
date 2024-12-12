@@ -78,30 +78,38 @@ function calculatePlayRange(trackName) {
 
 // BGMの再生制御
 async function controlBGM(bgmName) {
+  try {
   // console.log('Attempting to control BGM:', {
   //   bgmName,
   //   settings: bgmSettings.value,
   //   trackPositions: Object.fromEntries(trackPositions.value)
   // })
 
-  if (!bgmSettings.value || !audioPlayerRef.value) {
-    console.warn('BGM control skipped: not ready', {
-      settingsLoaded: !!bgmSettings.value,
-      playerReady: !!audioPlayerRef.value
-    })
-    return
-  }
+    if (!bgmSettings.value || !audioPlayerRef.value) {
+      console.warn('BGM control skipped: not ready', {
+        settingsLoaded: !!bgmSettings.value,
+        playerReady: !!audioPlayerRef.value
+      })
+      return
+    }
 
-  const bgmInfo = bgmSettings.value.bgmSettings.bgms[bgmName]
-  if (!bgmInfo) {
-    console.error(`BGM "${bgmName}" not found in settings`)
-    return
-  }
+    const bgmInfo = bgmSettings.value.bgmSettings.bgms[bgmName]
+    if (!bgmInfo) {
+      console.error(`BGM "${bgmName}" not found in settings`)
+      return
+    }
 
-  try {
     const playRange = calculatePlayRange(bgmInfo.trackName)
     if (!playRange) return
 
+    // 現在のトラックと新しいトラックを比較
+    if (currentBgmInfo.value?.trackName === bgmInfo.trackName) {
+      // 同じトラックの場合は再生を継続
+      console.log('Same track continues playing:', bgmInfo.trackName)
+      return
+    }
+
+    // 異なるトラックの場合は新しい設定を適用
     // currentBgmInfoの更新
     currentBgmInfo.value = {
       ...bgmInfo,
@@ -112,23 +120,35 @@ async function controlBGM(bgmName) {
     const audioEl = audioPlayerRef.value.$refs.audioPlayer
     audioEl.currentTime = playRange.startTime
     
-    if (audioEl.paused) {
-      await audioEl.play()
-    }
+    // 再生を開始し、isPlayingを同期
+    await audioEl.play()
+    audioPlayerRef.value.isPlaying = true
     
     debug.value.currentBgm = {
       name: bgmName,
       info: currentBgmInfo.value,
       audioStatus: {
         currentTime: audioEl.currentTime,
-        paused: audioEl.paused
+        paused: audioEl.paused,
+        isPlaying: audioPlayerRef.value.isPlaying
       }
     }
-    
     // console.log('BGM switched successfully:', debug.value.currentBgm)
   } catch (error) {
     debug.value.lastError = error
     console.error('BGM control failed:', error)
+  }
+}
+
+// 再生状態の変更を監視するハンドラーを追加
+function handlePlayStateChange(isPlaying) {
+  if (audioPlayerRef.value?.$refs.audioPlayer) {
+    const audioEl = audioPlayerRef.value.$refs.audioPlayer
+    if (isPlaying) {
+      audioEl.play()
+    } else {
+      audioEl.pause()
+    }
   }
 }
 
@@ -148,10 +168,13 @@ const onTimeUpdate = () => {
 }
 
 // BGM停止用の関数（script setup内で定義）
-function stopBGM() {
+async function stopBGM() {
   if (audioPlayerRef.value) {
     const audioEl = audioPlayerRef.value.$refs.audioPlayer
     audioEl.pause()
+    // 停止時にisPlayingを同期
+    audioPlayerRef.value.isPlaying = false
+    currentBgmInfo.value = null
   }
 }
 
@@ -164,7 +187,7 @@ watch(
       const bgmName = currentSlide?.meta?.slide?.frontmatter?.bgmName
 
       if (bgmName === 'non') {
-        stopBGM()
+        await stopBGM()
       } 
       else if (bgmName) {
         await controlBGM(bgmName)
@@ -235,5 +258,6 @@ onUnmounted(() => {
   <AudioPlayer 
     ref="audioPlayerRef"
     :src="normalizedAudioPath"
+    @playStateChange="handlePlayStateChange"
   />
 </template>
