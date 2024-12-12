@@ -40,6 +40,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { resolveBasePath } from '../utils/path'
 
 const props = defineProps({
   title: {
@@ -58,12 +59,8 @@ const props = defineProps({
 
 const hasError = ref(false)
 
-// BASE_URL を考慮したパス生成
 const imageSrc = computed(() => {
-  const base = import.meta.env.BASE_URL || '/'
-  // 先頭と末尾のスラッシュを正規化
-  const normalizedBase = base.endsWith('/') ? base : `${base}/`
-  return `${normalizedBase}images/${props.imageName}.png`
+  return resolveBasePath(`images/${props.imageName}.png`)
 })
 
 // エラーハンドリング時にパス情報も表示

@@ -128,6 +128,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
+import { resolveBasePath } from '../utils/path'
 
 const isHidden = ref(false)
 const audioPlayer = ref(null)
@@ -142,9 +143,9 @@ const duration = ref(0)
 const toggleVisibility = () => {
   isHidden.value = !isHidden.value
 }
+
 const audioPath = computed(() => {
-  const base = import.meta.env.BASE_URL || '/'
-  return `${base}audio/bgm.mp3`.replace('//', '/')
+  return resolveBasePath('/audio/bgm.mp3')
 })
 
 const volumeIcon = computed(() => {

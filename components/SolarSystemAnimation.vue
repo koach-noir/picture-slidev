@@ -26,10 +26,10 @@ defineProps({
     <div v-if="$slidev">
       <div
         v-motion
-        :initial="{ x: 10, y: 0 }"
+        :initial="{ x: 10, y: 150 }"
         :enter="{ 
             x: 0,
-            y: -50,
+            y: -100,
           transition: { 
             duration: earthOrbitDuration, 
             ease: 'linear',
@@ -49,10 +49,10 @@ defineProps({
         <!-- 月の軌道 -->
         <div
           v-motion
-          :initial="{ x: -300, y: -108 }"
+          :initial="{ x: -30, y: -18 }"
           :enter="{ 
-            x: 900,
-            y: -175,
+            x: 90,
+            y: -15,
             transition: { 
               duration: moonOrbitDuration, 
               ease: 'linear',

@@ -9,6 +9,8 @@ highlighter: shiki
 background: "/images/sun-in-the-universe.svg"
 bgmName: "non"
 layout: cover
+# canvasWidth: 1920
+aspectRatio: 16/9
 ---
 
 <!-- 表紙としてのスタイリングと内容 -->
@@ -38,7 +40,6 @@ layout: cover
 
 ---
 background: "/images/sun-in-the-universe.svg"
-transition: zoom
 bgmName: "intro"  <!-- 2枚目のスライドから音楽開始 -->
 ---
 
@@ -55,8 +56,8 @@ bgmName: "intro"  <!-- 2枚目のスライドから音楽開始 -->
     v-if="$slidev"
     :earth-orbit-duration="400000"
     :moon-orbit-duration="37750"
-    :earth-size="840"
-    :moon-size="495"
+    :earth-size="510"
+    :moon-size="235"
   />
   
 </div>

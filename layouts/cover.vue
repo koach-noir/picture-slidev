@@ -22,15 +22,27 @@ const backgroundStyle = computed(() => {
   
   return {
     backgroundImage: `url(${resolveBasePath(bgImage)})`,
-    backgroundSize: 'contain',
+    backgroundSize: '100% 100%',
     backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat'
+    backgroundRepeat: 'no-repeat',
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: -1
   }
 })
 </script>
 
 <style>
+.slidev-layout.default,
 .slidev-layout.cover {
   @apply w-full h-full;
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 </style>

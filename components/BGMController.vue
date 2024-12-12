@@ -2,6 +2,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 import { useSlideContext } from '@slidev/client'
+import { resolveBasePath } from '../utils/path'
 import AudioPlayer from './AudioPlayer.vue'
 
 // 状態管理
@@ -178,17 +179,12 @@ watch(
 // 初期化
 onMounted(async () => {
   try {
-    const base = import.meta.env.BASE_URL || '/'
-    const normalizedBase = base.endsWith('/') ? base : `${base}/`
-    
-    // 設定ファイルの取得
-    const response = await fetch(`${normalizedBase}audio/bgm-settings.json`.replace('//', '/'))
+    const settingsPath = resolveBasePath('/audio/bgm-settings.json')
+    const response = await fetch(settingsPath)
     bgmSettings.value = await response.json()
     
-    // CUEファイルの取得と解析
-    const cuePath = bgmSettings.value.bgmSettings.cuePath
-    const normalizedCuePath = `${normalizedBase}${cuePath.replace(/^\//, '')}`.replace('//', '/')
-    const cueResponse = await fetch(normalizedCuePath)
+    const cuePath = resolveBasePath(bgmSettings.value.bgmSettings.cuePath)
+    const cueResponse = await fetch(cuePath)
     
     if (!cueResponse.ok) {
       throw new Error(`Failed to fetch CUE file: ${cueResponse.status} ${cueResponse.statusText}`)
