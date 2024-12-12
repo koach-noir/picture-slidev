@@ -7,8 +7,39 @@ theme: '@slidev/theme-default'
 dark: true  # ダークモードを有効化
 highlighter: shiki
 background: "/images/sun-in-the-universe.svg"
-class: 'bg-contain bg-center bg-no-repeat'
-bgmName: "intro"
+bgmName: "non"
+layout: cover
+---
+
+<!-- 表紙としてのスタイリングと内容 -->
+<div class="book-cover">
+  <h1 class="title">天体</h1>
+  <div class="subtitle">太陽・地球・月</div>
+  <div class="instruction">クリックまたは → キーで開始</div>
+</div>
+
+<style>
+.book-cover {
+  @apply flex flex-col items-center justify-center h-full;
+}
+
+.title {
+  @apply text-6xl mb-4 font-bold;
+}
+
+.subtitle {
+  @apply text-2xl mb-8;
+}
+
+.instruction {
+  @apply text-sm opacity-50 mt-8;
+}
+</style>
+
+---
+background: "/images/sun-in-the-universe.svg"
+transition: zoom
+bgmName: "intro"  <!-- 2枚目のスライドから音楽開始 -->
 ---
 
 <div class="content-wrapper">
@@ -20,7 +51,7 @@ bgmName: "intro"
 
   </div>
 
-  <SolarSystemAnimation 
+  <SolarSystemAnimation
     v-if="$slidev"
     :earth-orbit-duration="400000"
     :moon-orbit-duration="37750"
@@ -30,18 +61,22 @@ bgmName: "intro"
   
 </div>
 
+---
+src: ./pages/toc.md
+activeTopic: ""
+bgmName: "non"
+---
+
+<!-- this page will be loaded from './pages/toc.md' Contents here are ignored -->
 
 ---
 src: ./pages/toc.md
-transition: slide-down
 activeTopic: "sun"
 bgmName: "main"
 ---
 
 <!-- this page will be loaded from './pages/toc.md' Contents here are ignored -->
 
----
-bgmName: "main"
 ---
 
 # 太陽について
@@ -70,15 +105,11 @@ bgmName: "main"
 
 ---
 src: ./pages/toc.md
-transition: slide-down
 activeTopic: "earth"
-bgmName: "main"
 ---
 
 <!-- this page will be loaded from './pages/toc.md' Contents here are ignored -->
 
----
-bgmName: "main"
 ---
 
 # 地球について
@@ -107,15 +138,11 @@ bgmName: "main"
 
 ---
 src: ./pages/toc.md
-transition: slide-down
 activeTopic: "moon"
-bgmName: "main"
 ---
 
 <!-- this page will be loaded from './pages/toc.md' Contents here are ignored -->
 
----
-bgmName: "main"
 ---
 
 # 月について
@@ -143,7 +170,39 @@ bgmName: "main"
 
 ---
 src: ./pages/toc.md
-transition: slide-down
 activeTopic: ""
 bgmName: "ending"
 ---
+
+<!-- this page will be loaded from './pages/toc.md' Contents here are ignored -->
+
+---
+background: "/images/sun-in-the-universe.svg"
+bgmName: "non"
+layout: cover
+---
+
+<!-- 表紙としてのスタイリングと内容 -->
+<div class="book-cover">
+  <h1 class="title">天体</h1>
+  <div class="subtitle">太陽・地球・月</div>
+  <div class="instruction">　　　　　　　　　　おわり</div>
+</div>
+
+<style>
+.book-cover {
+  @apply flex flex-col items-center justify-center h-full;
+}
+
+.title {
+  @apply text-6xl mb-4 font-bold;
+}
+
+.subtitle {
+  @apply text-2xl mb-8;
+}
+
+.instruction {
+  @apply text-sm opacity-50 mt-8;
+}
+</style>

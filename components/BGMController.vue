@@ -146,42 +146,48 @@ const onTimeUpdate = () => {
   }
 }
 
+// BGM停止用の関数（script setup内で定義）
+function stopBGM() {
+  if (audioPlayerRef.value) {
+    const audioEl = audioPlayerRef.value.$refs.audioPlayer
+    audioEl.pause()
+  }
+}
+
 // スライド変更の監視
 watch(
   () => $slidev.nav.currentPage,
   async (newPage) => {
-    // 現在のスライドのfrontmatterを直接取得
-    const currentSlide = $slidev.nav.currentSlideRoute
-    const bgmName = currentSlide?.meta?.slide?.frontmatter?.bgmName
+    try {
+      const currentSlide = $slidev.nav.currentSlideRoute
+      const bgmName = currentSlide?.meta?.slide?.frontmatter?.bgmName
 
-    // console.log('Slide changed:', {
-    //   page: newPage,
-    //   bgmName,
-    //   slideMeta: currentSlide?.meta
-    // })
-
-    if (bgmName) {
-      await controlBGM(bgmName)
+      if (bgmName === 'non') {
+        stopBGM()
+      } 
+      else if (bgmName) {
+        await controlBGM(bgmName)
+      }
+    } catch (error) {
+      console.error('BGM transition failed:', error)
     }
-  }
+  },
+  { immediate: true }
 )
 
 // 初期化
 onMounted(async () => {
   try {
     const base = import.meta.env.BASE_URL || '/'
-    // 先頭と末尾のスラッシュを正規化
     const normalizedBase = base.endsWith('/') ? base : `${base}/`
     
     // 設定ファイルの取得
     const response = await fetch(`${normalizedBase}audio/bgm-settings.json`.replace('//', '/'))
     bgmSettings.value = await response.json()
     
-    // CUEファイルのパスを構築
+    // CUEファイルの取得と解析
     const cuePath = bgmSettings.value.bgmSettings.cuePath
     const normalizedCuePath = `${normalizedBase}${cuePath.replace(/^\//, '')}`.replace('//', '/')
-    
-    // console.log('Attempting to fetch CUE from:', normalizedCuePath)
     const cueResponse = await fetch(normalizedCuePath)
     
     if (!cueResponse.ok) {
@@ -190,19 +196,27 @@ onMounted(async () => {
     
     const cueText = await cueResponse.text()
     trackPositions.value = parseCueSheet(cueText)
-    
-    // console.log('BGM Controller initialized:', debug.value)
 
     // AudioPlayerの初期設定
     if (audioPlayerRef.value) {
       const audioEl = audioPlayerRef.value.$refs.audioPlayer
       audioEl.addEventListener('timeupdate', onTimeUpdate)
 
-      // 初期BGMの設定
-      const initialBgmName = $slidev?.nav?.currentRoute?.meta?.frontmatter?.bgmName
-      if (initialBgmName) {
-        // console.log('Setting initial BGM:', initialBgmName)
+      // 現在のスライドのBGM名を取得（新しい方法）
+      const currentSlide = $slidev.nav.currentSlideRoute
+      const initialBgmName = currentSlide?.meta?.slide?.frontmatter?.bgmName
+
+      // BGMの自動再生
+      if (initialBgmName && initialBgmName !== 'non') {
         await controlBGM(initialBgmName)
+        // 明示的に再生を開始
+        const playPromise = audioEl.play()
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.warn('Auto-play was prevented:', error)
+            // ここでユーザーに再生ボタンを押すように促すUIを表示することもできます
+          })
+        }
       }
     }
 
