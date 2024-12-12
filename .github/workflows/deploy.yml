@@ -32,9 +32,8 @@ jobs:
       - name: Install dependencies
         run: nci
 
-        - name: Type Check  # TypeScriptの型チェックを追加
+      - name: Type Check
         run: nr type-check
-
 
       - name: Build
         run: nr build --base /${{ github.event.repository.name }}/
