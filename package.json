@@ -3,6 +3,7 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "type-check": "tsc --noEmit",
     "build": "slidev build",
     "dev": "slidev --open",
     "export": "slidev export"
@@ -14,5 +15,9 @@
     "@slidev/theme-default": "^0.25.0",
     "@slidev/theme-seriph": "latest",
     "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
   }
 }
