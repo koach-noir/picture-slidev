@@ -11,6 +11,7 @@ bgmName: "non"
 layout: cover
 # canvasWidth: 1920
 aspectRatio: 16/9
+transition: slide-page-turn
 ---
 
 <!-- 表紙としてのスタイリングと内容 -->
@@ -206,6 +207,6 @@ layout: cover
 }
 
 .instruction {
-  @apply text-sm opacity-50 mt-8;
+  @apply text-4xl opacity-80 mt-8;
 }
 </style>

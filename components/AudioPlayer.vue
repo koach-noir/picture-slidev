@@ -326,9 +326,10 @@ const restart = async () => {
 
 <style scoped>
 .audio-controls {
+  /* @apply fixed top-5 right-5 z-50; */
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  /* bottom: 20px; */
+  /* right: 20px; */
   z-index: 100;
 }
 
@@ -524,8 +525,8 @@ const restart = async () => {
 
 .volume-slider-container {
   position: absolute;
-  bottom: 100%;
-  left: 50%;
+  bottom: -200%;
+  left: 100%;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.8);
   padding: 15px 10px;

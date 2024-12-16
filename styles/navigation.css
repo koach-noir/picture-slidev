@@ -1,0 +1,48 @@
+.hover-area {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  /* justify-content: center;
+  align-items: center; */
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: background-color 0.3s ease;
+
+  margin: 0;
+  padding: 0;
+  /* 開発中のみ */
+  border: 2px solid rgba(255, 255, 255, 0.2); /* デバッグ用 */
+  background: rgba(255, 255, 255, 0.1);       /* より見やすく */
+}
+
+.hover-area:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.hover-area.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+  background: rgba(128, 128, 128, 0.2);
+}
+
+/* 開発中のみ それぞれの領域を色分け */
+.volume-left, .volume-right {
+  border-color: rgba(255, 0, 0, 0.3);
+}
+
+.intent-left, .intent-right {
+  border-color: rgba(255, 255, 0, 0.3);
+}
+
+.standby {
+  border-color: rgba(0, 255, 0, 0.3);
+}
+
+.bookmark-prev {
+  border-color: rgba(255, 0, 0, 0.3);
+}
+
+.bookmark-next {
+  border-color: rgba(255, 255, 0, 0.3);
+}
