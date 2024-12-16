@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: runs-on: ubuntu-22.04  # ubuntu-latestから変更 2024年12月5日からUbuntu 24.04がubuntu-latestのデフォルトバージョンになる予定
+    runs-on: ubuntu-22.04  # ubuntu-latestから変更 2024年12月5日からUbuntu 24.04がubuntu-latestのデフォルトバージョンになる予定
 
     steps:
       - uses: actions/checkout@v4
