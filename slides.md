@@ -1,5 +1,4 @@
 ---
-transition: fade-out
 mdc: true
 theme: '@slidev/theme-default'
 # theme: '@slidev/theme-apple-basic'
