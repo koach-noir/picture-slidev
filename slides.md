@@ -13,11 +13,7 @@ layout: cover
 ---
 
 <!-- 表紙 -->
-<div class="book-cover">
-  <h1 class="title">天体</h1>
-  <div class="subtitle">太陽・地球・月</div>
-  <div class="instruction">クリックまたは → キーで開始</div>
-</div>
+
 
 ---
 layout: default
@@ -148,8 +144,3 @@ bgmName: "non"
 ---
 
 <!-- 裏表紙 -->
-<div class="book-cover">
-  <h1 class="title">天体</h1>
-  <div class="subtitle">太陽・地球・月</div>
-  <div class="instruction">　　　　　　　　　　おわり</div>
-</div>

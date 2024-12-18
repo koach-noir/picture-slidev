@@ -1,7 +1,7 @@
 <!-- layouts/cover.vue -->
 <template>
   <div 
-    class="slidev-layout cover"
+    class="slidev-layout cover-layout"
     :style="combinedStyle"
   >
     <div class="book-cover" :class="{ 'is-back-cover': isBackCover }">
@@ -44,6 +44,10 @@ const props = defineProps({
 // 現在のスライドが最後のスライドかどうかを判定
 const isBackCover = computed(() => {
   return $slidev.nav.currentPage === $slidev.nav.total
+})
+
+const instruction = computed(() => {
+  return isBackCover.value ? 'おわり' : props.instruction
 })
 
 // 背景スタイルの計算
