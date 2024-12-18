@@ -5,7 +5,6 @@ theme: '@slidev/theme-default'
 # theme: '@slidev/theme-bricks'
 dark: true  # ダークモードを有効化
 highlighter: shiki
-background: "/images/sun-in-the-universe.svg"
 bgmName: "non"
 # canvasWidth: 1920
 aspectRatio: 16/9
@@ -13,30 +12,12 @@ transition: custom-book-turn
 layout: cover
 ---
 
-<!-- 表紙としてのスタイリングと内容 -->
+<!-- 表紙 -->
 <div class="book-cover">
   <h1 class="title">天体</h1>
   <div class="subtitle">太陽・地球・月</div>
   <div class="instruction">クリックまたは → キーで開始</div>
 </div>
-
-<style>
-.book-cover {
-  @apply flex flex-col items-center justify-center h-full;
-}
-
-.title {
-  @apply text-6xl mb-4 font-bold;
-}
-
-.subtitle {
-  @apply text-2xl mb-8;
-}
-
-.instruction {
-  @apply text-sm opacity-50 mt-8;
-}
-</style>
 
 ---
 layout: default
@@ -162,32 +143,13 @@ bgmName: "ending"
 <!-- this page will be loaded from './pages/toc.md' Contents here are ignored -->
 
 ---
-background: "/images/sun-in-the-universe.svg"
-bgmName: "non"
 layout: cover
+bgmName: "non"
 ---
 
-<!-- 表紙としてのスタイリングと内容 -->
+<!-- 裏表紙 -->
 <div class="book-cover">
   <h1 class="title">天体</h1>
   <div class="subtitle">太陽・地球・月</div>
   <div class="instruction">　　　　　　　　　　おわり</div>
 </div>
-
-<style>
-.book-cover {
-  @apply flex flex-col items-center justify-center h-full;
-}
-
-.title {
-  @apply text-6xl mb-4 font-bold;
-}
-
-.subtitle {
-  @apply text-2xl mb-8;
-}
-
-.instruction {
-  @apply text-4xl opacity-80 mt-8;
-}
-</style>
