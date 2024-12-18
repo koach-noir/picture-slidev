@@ -80,10 +80,8 @@ bgmName: "main"
 <!-- this page will be loaded from './pages/toc.md' Contents here are ignored -->
 
 ---
-layout: book-page
 ---
 
-::left::
 # 太陽について
 
 <div class="sun-facts">
@@ -97,7 +95,6 @@ layout: book-page
 </v-clicks>
 </div>
 
-::right::
 <div class="content-right">
   <CelestialImage title="太陽" imageName="sun" :imageSize="360" />
 </div>
@@ -110,10 +107,8 @@ activeTopic: "earth"
 <!-- this page will be loaded from './pages/toc.md' Contents here are ignored -->
 
 ---
-layout: book-page
 ---
 
-::left::
 # 地球について
 <div class="earth-facts">
 <v-clicks every="1">
@@ -127,7 +122,6 @@ layout: book-page
 </v-clicks>
 </div>
 
-::right::  
 <div class="content-right">
   <CelestialImage title="地球" imageName="earth" :imageSize="300" />
 </div>
@@ -141,10 +135,8 @@ activeTopic: "moon"
 
 ---
 bgmName: "main"
-layout: book-page
 ---
 
-::left::
 # 月について
 <div class="moon-facts">
 <v-clicks every="1">
@@ -157,7 +149,6 @@ layout: book-page
 </v-clicks>
 </div>
 
-::right::
 <div class="content-right">
   <CelestialImage title="月" imageName="moon" :imageSize="200" />
 </div>

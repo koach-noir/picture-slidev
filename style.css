@@ -1,106 +1,109 @@
 /* style.css */
-.content-wrapper {
+/* 基本レイアウト構造 */
+.slidev-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   position: relative;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
-.floating-title {
-  position: absolute;
-  top: 2rem;
-  left: 2rem;
-  z-index: 10;
-  pointer-events: none; /* タイトルエリアをクリック透過にする */
+/* グリッドレイアウト制御 */
+.slidev-layout > * {
+  grid-column: span 2;
 }
 
-.floating-title h1,
-.floating-title h2 {
-  color: white;
-  text-shadow: 
-    -1px -1px 0 #000,  
-     1px -1px 0 #000,
-    -1px  1px 0 #000,
-     1px  1px 0 #000,
-    2px 2px 4px rgba(100,100,100,0.9);
-  margin: 0;
+.slidev-layout .left-page {
+  grid-column: 1;
 }
 
-.layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  min-height: 100%;
-  padding: 2rem;
-  align-items: center;
-  overflow: hidden; /* グリッドからのはみ出しを防ぐ */
+.slidev-layout .right-page {
+  grid-column: 2;
 }
 
-.content-left {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-left: 2rem;
-  min-width: 0; /* グリッド内でのオーバーフロー防止 */
-}
-
-.content-right {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  min-width: 0; /* グリッド内でのオーバーフロー防止 */
-}
-
-.slidev-page-transition {
-  position: relative;
-}
-
-/* トランジション中のみ表示される綴じライン */
-.slidev-page-transition::before {
+/* 中央の綴じ線 - ダークモード対応 */
+.slidev-layout::after {
   content: '';
   position: absolute;
   top: 0;
   left: 50%;
   height: 100%;
   width: 2px;
-  background-color: rgba(255, 255, 255, 0.2); /* 控えめな白線 */
-  z-index: 100;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  /* ダークモードに応じて色を変更 */
+  background: var(--slidev-theme-binding-color, rgba(128, 128, 128, 0.4));
+  transform: translateX(-50%);
+  z-index: 1;
+  pointer-events: none;
 }
 
-/* トランジション中のみ綴じラインを表示 */
-.slidev-page-transition.transition-active::before {
-  opacity: 1;
-}
-/* 基本のトランジションクラス */
-.custom-book-turn-enter-active,
-.custom-book-turn-leave-active {
-  position: absolute;
+/* コンテンツ配置用ユーティリティ */
+.content-wrapper {
+  position: relative;
   width: 100%;
-  transition: transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1),
-              box-shadow 0.8s;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
+  height: 100%;
+}
+
+/* フローティングタイトル */
+.floating-title {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
   z-index: 10;
+  pointer-events: none;
 }
 
-/* 退場時のスタイル */
-.custom-book-turn-leave-to {
-  transform-origin: left center;
-  transform: perspective(2000px) rotateY(-160deg);
-  box-shadow: -20px 0 30px rgba(0,0,0,0.3);
+/* フローティングタイトルの影 - ダークモード対応 */
+.floating-title h1,
+.floating-title h2 {
+  color: var(--slidev-theme-primary);
+  text-shadow: var(--slidev-theme-text-shadow, 
+    -1px -1px 0 var(--shadow-color),  
+     1px -1px 0 var(--shadow-color),
+    -1px  1px 0 var(--shadow-color),
+     1px  1px 0 var(--shadow-color),
+    2px 2px 4px var(--shadow-blur-color));
+  margin: 0;
 }
 
-/* 入場時の初期スタイル */
-.custom-book-turn-enter-from {
-  transform-origin: right center;
-  transform: perspective(2000px) rotateY(160deg);
-  box-shadow: 20px 0 30px rgba(0,0,0,0.3);
+/* 左右コンテンツエリアのパディング - ダークモード時の視認性向上 */
+.content-left,
+.content-right {
+  min-width: 0;
+  height: 100%;
+  padding: 2rem;
+  /* 必要に応じてダークモード時のコントラスト調整 */
+  background: var(--slidev-theme-content-background, transparent);
 }
 
-/* 入場完了時のスタイル */
-.custom-book-turn-enter-to {
-  transform: none;
-  box-shadow: none;
+.content-left {
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-right {
+  grid-column: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* カバーレイアウトは独自の構造を維持 */
+.slidev-layout.cover {
+  display: block;
+}
+
+/* ダークモード用のCSS変数定義 */
+:root {
+  --shadow-color: #000;
+  --shadow-blur-color: rgba(100,100,100,0.9);
+  --slidev-theme-binding-color: rgba(128, 128, 128, 0.4);
+}
+
+/* ダークモード時のCSS変数上書き */
+:root.dark {
+  --shadow-color: #fff;
+  --shadow-blur-color: rgba(155,155,155,0.9);
+  --slidev-theme-binding-color: rgba(128, 128, 128, 0.6);
 }
